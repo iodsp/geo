@@ -10,6 +10,7 @@
 #include <adbase/Head.hpp>
 #include "AdbaseConfig.hpp"
 #include "Http.hpp"
+#include "Grpc.hpp"
 #include "McProcessor.hpp"
 #include "HeadProcessor.hpp"
 
@@ -41,10 +42,12 @@ private:
 	adbase::InetAddress* _headAddr = nullptr;
 	adbase::head::Interface* _headInterface = nullptr;
 	adbase::head::Handler* _headHandler	    = nullptr;
+	std::shared_ptr<Grpc> _grpcServer;
 
 	void init();
 	void stop();
 	void initHttp();
+	void initGrpc();
 	void initHead();
 	void initMc();
 	void bindMcCallback();

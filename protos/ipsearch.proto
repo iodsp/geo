@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.iodsp.geo";
+option java_outer_classname = "IpSearch";
+option objc_class_prefix = "HLW";
+
+package appproto;
+
+service IpSearch {
+	rpc search (IpSearchRequest) returns (IpSearchReply) {}
+}
+
+message IpSearchRequest {
+	string ip = 1;
+}
+
+message IpSearchReply {
+	string code = 1;
+	string country = 2;
+	string province = 3;
+	string city = 4;
+}

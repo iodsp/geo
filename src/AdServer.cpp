@@ -31,6 +31,9 @@ void AdServer::run() {
 	if (_configure->isStartHead) {
 		_headServer->start(_configure->headThreadNum);
 	}
+	if (_configure->isStartGrpc) {
+		_grpcServer->start();
+	}
 }
 
 // }}}
@@ -45,6 +48,9 @@ void AdServer::init() {
 	}
 	if (_configure->isStartHead) {
 		initHead();
+	}
+	if (_configure->isStartGrpc) {
+		initGrpc();
 	}
 }
 
@@ -76,6 +82,10 @@ void AdServer::stop() {
 		delete _headAddr;
 		delete _headInterface;
 		delete _headHandler;
+	}
+
+	if (_configure->isStartGrpc && _grpcServer) {
+		_grpcServer->stop();
 	}
 }
 
@@ -208,6 +218,13 @@ void AdServer::bindMcCallback() {
     _mcInterface->setPreExecute(std::bind(&McProcessor::preExecute, _mcProcessor));
     _mcInterface->setPostExecute(std::bind(&McProcessor::postExecute, _mcProcessor));
     _mcInterface->setUnknownExecute(std::bind(&McProcessor::unknownExecute, _mcProcessor));
+}
+
+// }}}
+// {{{ void AdServer::initGrpc()
+
+void AdServer::initGrpc() {
+	_grpcServer =  std::shared_ptr<Grpc>(new Grpc(_context));
 }
 
 // }}}

@@ -1,5 +1,21 @@
 cmake_minimum_required(VERSION 2.6)
-cmake_policy(SET CMP0017 OLD)
+
+find_package(Protobuf REQUIRED)
+message(STATUS "Using protobuf ${protobuf_VERSION}")
+
+find_package(GRPC REQUIRED)
+message(STATUS "Using gRPC ${gRPC_VERSION}")
+
+
+
+set(PROTO_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/proto-src)
+file(MAKE_DIRECTORY ${PROTO_SRC_DIR})
+include_directories(${PROTO_SRC_DIR})
+
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SRC_DIR} ${PROTOS})
+grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_SRC_DIR} ${PROTOS})
+
+message(${GRPC_HDRS})
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/thridpart)
@@ -14,34 +30,23 @@ configure_file (
 	"${PROJECT_SOURCE_DIR}/src/Version.hpp"	
 )
 
-find_package(Protobuf REQUIRED)
-find_package(GRPC REQUIRED)
-
-set(PROTOS
-	${CMAKE_CURRENT_SOURCE_DIR}/protos/helloworld.proto
-)
-
-set(PROTO_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/proto-src)
-file(MAKE_DIRECTORY ${PROTO_SRC_DIR})
-include_directories(${PROTO_SRC_DIR})
-
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SRC_DIR} ${PROTOS})
-grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_SRC_DIR} ${PROTOS})
-
-
 SET(GEO_SRC geo.cpp
 	BootStrap.cpp	
 	App.cpp	
 	AdServer.cpp
 	Http.cpp
+	Grpc.cpp
 	Http/HttpInterface.cpp
 	Http/Server.cpp
 	Http/Index.cpp
+	Grpc/IpSearchServiceImpl.cpp
 	McProcessor.cpp
 	HeadProcessor.cpp
 	Timer.cpp
 	App/IpUtils.cpp
 	App/IpSearch.cpp
+	${PROTO_SRCS}
+	${GRPC_SRCS}
 )
 ADD_EXECUTABLE(geo ${GEO_SRC})
 
@@ -60,7 +65,7 @@ ELSE (LIBADBASE_INCLUDE_DIR AND LIBADBASE_LIBRARIES)
     MESSAGE(FATAL_ERROR "Failed to find libadbase libraries")
 ENDIF (LIBADBASE_INCLUDE_DIR AND LIBADBASE_LIBRARIES)
 
-TARGET_LINK_LIBRARIES(geo libevent.a rt libz.a)
+TARGET_LINK_LIBRARIES(geo libevent.a rt libz.a grpc++_reflection grpc++_unsecure grpc++ grpc libprotobuf.a)
 
 # pthread
 FIND_PACKAGE( libpthread REQUIRED)

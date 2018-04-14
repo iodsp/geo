@@ -55,7 +55,7 @@ void Timer::init() {
 // {{{ void Timer::defaultTimer()
 
 void Timer::defaultTimer(void*) {
-	LOG_INFO << "Timer " << "default";
+//	LOG_INFO << "Timer " << "default";
 }
 
 // }}}

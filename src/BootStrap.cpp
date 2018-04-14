@@ -195,6 +195,7 @@ void BootStrap::loadConfig() {
 	_configure->isStartMc   = config.getOptionBool("adserver", "mc");
 	_configure->isStartHead = config.getOptionBool("adserver", "head");
 	_configure->isStartHttp = config.getOptionBool("adserver", "http");
+	_configure->isStartGrpc = config.getOptionBool("adserver", "grpc");
 
 	_configure->httpHost = config.getOption("http", "host");
 	_configure->httpPort = config.getOptionUint32("http", "port");
@@ -215,6 +216,9 @@ void BootStrap::loadConfig() {
 	_configure->headPort = config.getOptionUint32("head", "port");
 	_configure->headServerName   = config.getOption("head", "serverName");
 	_configure->headThreadNum    = config.getOptionUint32("head", "threadNum");
+
+	_configure->grpcHost = config.getOption("grpc", "host");
+	_configure->grpcPort = config.getOptionUint32("grpc", "port");
 	
 	_app->loadConfig(config);
 }

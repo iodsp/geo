@@ -1,6 +1,4 @@
-
-
-cate and configure the Google Protocol Buffers library
+#cate and configure the Google Protocol Buffers library
 #
 # Adds the following targets:
 #

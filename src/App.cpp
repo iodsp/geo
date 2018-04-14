@@ -2,7 +2,6 @@
 #include <adbase/Logging.hpp>
 #include "App.hpp"
 #include "App/IpUtils.hpp"
-#include "App/IpSearch.hpp"
 
 //{{{ macros
 
@@ -44,16 +43,8 @@ App::~App() {
 // {{{ void App::run()
 
 void App::run() {
-
-	uint32_t result = app::IpUtils::ip2long("172.168.1.1");
-	LOG_INFO << result;	
-	LOG_INFO << app::IpUtils::long2ip(result);
-
-	app::IpSearch* ipsearch = new app::IpSearch();
-	ipsearch->init("/home/vagrant/code/geo/data/ipcodeList.txt");
-	app::LocationCodeInfo info;
-	ipsearch->search("61.135.152.134", info);
-	LOG_INFO << "国家：" << info.country << " 省份：" << info.province << " 城市:" << info.city;
+	_ipSearch = std::shared_ptr<app::IpSearch>(new app::IpSearch());
+	_ipSearch->init(_configure->locationPath);
 }
 
 // }}}
@@ -73,6 +64,7 @@ void App::stop() {
 
 void App::setAdServerContext(AdServerContext* context) {
 	context->app = this;
+	context->ipSearch = _ipSearch.get();
 }
 
 // }}}
@@ -88,6 +80,9 @@ void App::setTimerContext(TimerContext* context) {
 void App::loadConfig(adbase::IniConfig& config) {
 	
 	LOAD_TIMER_CONFIG(Default);
+
+    _configure->locationPath = config.getOption("ipsearch", "locationPath");\
+
 }
 
 //}}}

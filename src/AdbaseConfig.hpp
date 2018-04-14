@@ -46,6 +46,7 @@ typedef struct adbaseConfig {
 	bool isStartMc;	
 	bool isStartHead;	
 	bool isStartHttp;	
+	bool isStartGrpc;	
 
 	std::string httpHost;
 	int httpPort;
@@ -66,16 +67,26 @@ typedef struct adbaseConfig {
 	int mcPort;
 	std::string mcServerName;
 	int mcThreadNum;
+
+	std::string grpcHost;
+	int grpcPort;
+
 	DECLARE_TIMER_CONFIG(Default);
+
+	std::string locationPath;
 } AdbaseConfig;
 
 class App;
+namespace app {
+class IpSearch;
+}
 typedef struct adserverContext {
 	AdbaseConfig* config;
 	adbase::EventBasePtr mainEventBase;	
 	App* app;
 	adbase::metrics::Metrics* metrics;
 	// 前后端交互数据指针添加到下面
+	app::IpSearch* ipSearch;
 } AdServerContext;
 
 typedef struct timerContext {
