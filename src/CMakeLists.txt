@@ -65,7 +65,8 @@ ELSE (LIBADBASE_INCLUDE_DIR AND LIBADBASE_LIBRARIES)
     MESSAGE(FATAL_ERROR "Failed to find libadbase libraries")
 ENDIF (LIBADBASE_INCLUDE_DIR AND LIBADBASE_LIBRARIES)
 
-TARGET_LINK_LIBRARIES(geo libevent.a rt libz.a grpc++_reflection grpc++_unsecure grpc++ grpc libprotobuf.a)
+#TARGET_LINK_LIBRARIES(geo libevent.a rt libgrpc++_reflection.a libgrpc++_unsecure.a libgrpc++.a libgrpc.a libz.a libprotobuf.a ssl crypto)
+TARGET_LINK_LIBRARIES(geo libevent.a rt grpc++_reflection libgrpc++_unsecure.a libgrpc++.a libgrpc.a libz.a libprotobuf.a ssl crypto)
 
 # pthread
 FIND_PACKAGE( libpthread REQUIRED)
