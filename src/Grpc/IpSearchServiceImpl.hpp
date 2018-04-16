@@ -6,9 +6,9 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
-using appproto::IpSearchRequest;
-using appproto::IpSearchReply;
-using appproto::IpSearch;
+using geo::IpSearchRequest;
+using geo::IpSearchReply;
+using geo::IpSearch;
 
 namespace adserver {
 namespace grpc {

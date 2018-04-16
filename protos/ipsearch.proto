@@ -5,7 +5,7 @@ option java_package = "org.iodsp.geo";
 option java_outer_classname = "IpSearch";
 option objc_class_prefix = "HLW";
 
-package appproto;
+package geo;
 
 service IpSearch {
 	rpc search (IpSearchRequest) returns (IpSearchReply) {}

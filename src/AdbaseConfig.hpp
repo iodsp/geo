@@ -7,23 +7,6 @@
 
 // {{{ macros
 
-#ifndef DECLARE_KAFKA_CONSUMER_CONFIG
-#define DECLARE_KAFKA_CONSUMER_CONFIG(name) \
-	std::string topicNameConsumer##name;\
-	std::string groupId##name;\
-	std::string brokerListConsumer##name;\
-	std::string kafkaDebug##name;\
-	std::string offsetPath##name;\
-	std::string statInterval##name;\
-	bool isNewConsumer##name;
-#endif
-#ifndef DECLARE_KAFKA_PRODUCER_CONFIG
-#define DECLARE_KAFKA_PRODUCER_CONFIG(name) \
-	std::string topicNameProducer##name;\
-	std::string brokerListProducer##name;\
-	std::string debug##name;\
-	int queueLength##name;
-#endif
 #ifndef DECLARE_TIMER_CONFIG
 #define DECLARE_TIMER_CONFIG(name) \
 	int interval##name;
@@ -44,9 +27,8 @@ typedef struct adbaseConfig {
 	bool isAsync;
 	
 	bool isStartMc;	
-	bool isStartHead;	
 	bool isStartHttp;	
-	bool isStartGrpc;	
+	bool isStartGrpc;
 
 	std::string httpHost;
 	int httpPort;
@@ -58,20 +40,14 @@ typedef struct adbaseConfig {
 	std::string httpAccessLogDir;
 	int httpAccesslogRollSize;
 
-	std::string headHost;
-	int headPort;
-	std::string headServerName;
-	int headThreadNum;
+	std::string grpcHost;
+	int grpcPort;
 
 	std::string mcHost;
 	int mcPort;
 	std::string mcServerName;
 	int mcThreadNum;
-
-	std::string grpcHost;
-	int grpcPort;
-
-	DECLARE_TIMER_CONFIG(Default);
+	DECLARE_TIMER_CONFIG(DefaultTimer);
 
 	std::string locationPath;
 } AdbaseConfig;

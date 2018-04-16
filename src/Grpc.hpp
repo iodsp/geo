@@ -2,6 +2,7 @@
 #define GEO_GRPC_HPP_
 
 #include "AdbaseConfig.hpp"
+#include "Grpc/ServerServiceImpl.hpp"
 #include "Grpc/IpSearchServiceImpl.hpp"
 #include <grpc++/grpc++.h>
 #include <grpc/support/log.h>
@@ -37,6 +38,7 @@ private:
 	typedef std::vector<ThreadPtr> ThreadPool;
 	ThreadPool Threads;
 
+	DECLARE_GRPC_SERVICE(ServerServiceImpl);
 	DECLARE_GRPC_SERVICE(IpSearchServiceImpl);
 };
 

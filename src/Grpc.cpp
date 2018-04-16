@@ -31,6 +31,7 @@ Grpc::~Grpc() {
 // {{{ void Grpc::addService()
 
 void Grpc::addService(grpc::ServerBuilder& builder) {
+	ADSERVER_GRPC_ADD_SERVICE(ServerServiceImpl);
 	ADSERVER_GRPC_ADD_SERVICE(IpSearchServiceImpl);
 }
 

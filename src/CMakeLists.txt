@@ -1,22 +1,17 @@
 cmake_minimum_required(VERSION 2.6)
+FIND_PACKAGE(Protobuf REQUIRED)
+MESSAGE(STATUS "Using protobuf ${protobuf_VERSION}")
 
-find_package(Protobuf REQUIRED)
-message(STATUS "Using protobuf ${protobuf_VERSION}")
+FIND_PACKAGE(GRPC REQUIRED)
+MESSAGE(STATUS "Using gRPC ${gRPC_VERSION}")
 
-find_package(GRPC REQUIRED)
-message(STATUS "Using gRPC ${gRPC_VERSION}")
+SET(PROTO_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/proto-src)
+FILE(MAKE_DIRECTORY ${PROTO_SRC_DIR})
+INCLUDE_DIRECTORIES(${PROTO_SRC_DIR})
 
-
-
-set(PROTO_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/proto-src)
-file(MAKE_DIRECTORY ${PROTO_SRC_DIR})
-include_directories(${PROTO_SRC_DIR})
-
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SRC_DIR} ${PROTOS})
-grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_SRC_DIR} ${PROTOS})
-
-message(${GRPC_HDRS})
-
+PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${PROTO_SRC_DIR} ${PROTOS})
+GRPC_GENERATE_CPP(GRPC_SRCS GRPC_HDRS ${PROTO_SRC_DIR} ${PROTOS})
+MESSAGE(${GRPC_HDRS})
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/thridpart)
 LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
@@ -35,18 +30,18 @@ SET(GEO_SRC geo.cpp
 	App.cpp	
 	AdServer.cpp
 	Http.cpp
-	Grpc.cpp
 	Http/HttpInterface.cpp
 	Http/Server.cpp
 	Http/Index.cpp
-	Grpc/IpSearchServiceImpl.cpp
 	McProcessor.cpp
-	HeadProcessor.cpp
 	Timer.cpp
-	App/IpUtils.cpp
-	App/IpSearch.cpp
+	Grpc.cpp
+	Grpc/ServerServiceImpl.cpp
 	${PROTO_SRCS}
 	${GRPC_SRCS}
+	App/IpUtils.cpp
+	App/IpSearch.cpp
+	Grpc/IpSearchServiceImpl.cpp
 )
 ADD_EXECUTABLE(geo ${GEO_SRC})
 
@@ -65,8 +60,9 @@ ELSE (LIBADBASE_INCLUDE_DIR AND LIBADBASE_LIBRARIES)
     MESSAGE(FATAL_ERROR "Failed to find libadbase libraries")
 ENDIF (LIBADBASE_INCLUDE_DIR AND LIBADBASE_LIBRARIES)
 
-#TARGET_LINK_LIBRARIES(geo libevent.a rt libgrpc++_reflection.a libgrpc++_unsecure.a libgrpc++.a libgrpc.a libz.a libprotobuf.a ssl crypto)
-TARGET_LINK_LIBRARIES(geo libevent.a rt grpc++_reflection libgrpc++_unsecure.a libgrpc++.a libgrpc.a libz.a libprotobuf.a ssl crypto)
+TARGET_LINK_LIBRARIES(geo libevent.a rt libz.a dl)
+
+TARGET_LINK_LIBRARIES(geo grpc++_reflection libgrpc++_unsecure.a libgrpc++.a libgrpc.a libz.a libprotobuf.a ssl crypto)
 
 # pthread
 FIND_PACKAGE( libpthread REQUIRED)
